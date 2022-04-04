@@ -1,4 +1,3 @@
-clc;clear all;close all;
 % By Max Melin
 % This code reformats all of the APDM .h5 files from a subject on any given day,
 % does some preprocessing, and puts them into one .mat file.
@@ -9,37 +8,7 @@ clc;clear all;close all;
 % for a fair amount of user input, so that all of the tasks and sensors get
 % properly indexed to be called by later functions.
 
-%% run for multiple subjects
-subject = {'FUS002' 'FUS003' 'FUS004' 'FUS005' 'FUS006' 'FUS007' 'FUS008' ...
-    'FUS009' 'FUS0010' 'FUS0011' 'FUS0012' 'FUS0013' 'FUS0014' 'FUS0015' 'FUS0016' 'FUS0017' ...
-    'FUS0018' 'FUS0019' 'FUS0020' 'FUS0021' 'UT_FUS01' 'UT_FUS02' 'UT_FUS03' 'UT_FUS04' ...
-    'UT_FUS05' 'UT_FUS06' 'UT_FUS07' 'UT_FUS08'}; %cell of subjects, can contain multiple subjects
-
-datadir = 'Z:\Data\FUS_Gait\'; %path to data server, this should not need changing.
-savedir = 'Z:\Data\FUS_Gait\APDMpreprocessed'; %where to put the preprocessed data
-
-APDM_reformat_preprocess_onesubject(datadir,savedir,'FUS002','pre');
-
-        
-for x = 1:length(subject)
-    try
-        APDM_reformat_preprocess_onesubject(datadir,savedir,subject{x},'pre');
-    catch
-        fprintf(2,'\nPreprocessing failed for subject %s PRE\n',subject{x});
-    end
-    
-    try
-        APDM_reformat_preprocess_onesubject(datadir,savedir,subject{x},'post');
-    catch
-        fprintf(2,'\nPreprocessing failed for subject %s POST\n',subject{x});
-    end
-end
-
-
-%% Functions
-% this function runs APDM reformatting and some minor preprocessing for one
-% subject. All raw data is still saved in the new format.
-function APDM_reformat_preprocess_onesubject(datadir,savedir,subject,timepoint)
+function APDM_reformat_preprocess(datadir,savedir,subject,timepoint)
 loadpath = [datadir,subject,'\',subject,'_',timepoint,'\Tremor Raw Data'];
 files = dir([loadpath,'\*.h5']);
 
@@ -128,7 +97,7 @@ assert(length(un) == length(newlocations),'Double check your labeling!!! Somethi
 
 for i = filestochange %relabel the tasks that need it
     for j = 1:length(movedsensors) %relabel each sensor for that task
-        temp = output.(fields{i}).(movedsensors{j}); %reassign and delete 
+        temp = output.(fields{i}).(movedsensors{j}); %reassign and delete
         output.(fields{i}) = rmfield(output.(fields{i}),movedsensors{j});
         output.(fields{i}).(newlocations{inds(j)}) = temp;
     end
@@ -171,6 +140,8 @@ end
 filename = [subject,timepoint];
 save([savedir,'\',filename,'_preprocessed'], 'output');
 end
+
+%% Nested functions
 
 % trim and filtering
 function gyrodata_filtered = filter(gyrodata,fs)
