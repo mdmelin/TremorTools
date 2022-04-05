@@ -35,7 +35,7 @@ orderedtasks = {'resting','headtrunk','llegpost','rlegpost','llegact','rlegact',
 % here, we will get the sensors and the tasks in the right order
 temp = {files(:).name};
 inds = [];
-fprintf('\nHere is the original order of the %i files as they were named for subject %s%s. \nPlease view the pop-up figure and enter the proper index for each task.',length(temp),subject,timepoint);
+fprintf(2,'\nHere is the original order of the %i files as they were named for subject %s%s. \nPlease view the pop-up figure and enter the proper index for each task.',length(temp),subject,timepoint);
 
 for i = 1:length(orderedtasks)
     for j = 1:length(temp)
@@ -124,7 +124,7 @@ for i = 1:numtasks %iterate thru tasks
         angle2 = cumtrapz(1/fs, secondcomponent);
         angle3 = cumtrapz(1/fs, thirdcomponent);
         
-        morletConvolutionPlot(angle1,fs,t,40,1,50,100,30,"True",[-5 5]); %THIS FUNCTION IS CURRENTLY BROKEN
+        %morletConvolutionPlot(angle1,fs,t,40,1,50,100,30,"True",[-5 5]); %THIS FUNCTION IS CURRENTLY BROKEN
         
         output.(fields{i}).(sensorfields{j}).pca1_angle = angle1; % adds the "pca angle" data to the struct. where i is the task and j is the sensor
         output.(fields{i}).(sensorfields{j}).pca2_angle = angle2;
