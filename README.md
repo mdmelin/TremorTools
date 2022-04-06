@@ -69,16 +69,16 @@ The possible timepoints are:
 ```
 The sensor names are:
 ```
-RightWrist
-LeftWrist
-RightHand
-LeftHand
-RightUpperArm
-LeftUpperArm
-RightFood
-LeftFoot
-Lumbar
-Sternum
+'RightWrist'
+'LeftWrist'
+'RightHand'
+'LeftHand'
+'RightUpperArm'
+'LeftUpperArm'
+'RightFood'
+'LeftFoot'
+'Lumbar'
+'Sternum'
 ```
 Importantly, not all sensors are present for all tasks. We only have six sensors and they are moved around depending on the task, but the preprocessing/reformatting function takes care of all this renaming. 
 
