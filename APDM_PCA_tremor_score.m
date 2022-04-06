@@ -40,6 +40,12 @@ fieldname = ['pca' num2str(dimension) '_angle'];
 signal = sensordata.(fieldname);
 t = sensordata.time;
 
+%do padding now
+samplestograb = find(t >= padvec(1) & t <= (t(end) - padvec(2)));
+t = t(samplestograb);
+signal = signal(samplestograb);
+
+
 [b,a] = butter(4,[4 11]./nyquist,'bandpass'); %bandpass filter transfer function coeffs
 filtered = filtfilt(b,a,signal);
 
