@@ -25,12 +25,12 @@ if isfile(filecheckpath)
 end
 
 %input variables. These will need to change if number of tasks or sensors changes
-
+%======================================================================
 numsensors = 6; %number of APDM sensors used, should always be 6
 fs = 128; %sample rate of sensors, should always be 128
 nyquist = fs/2;
 orderedtasks = {'resting','headtrunk','llegpost','rlegpost','llegact','rlegact','llegact2','rlegact2','armsextended','wingbeat','larmact','rarmact','larmact2','rarmact2'};
-
+%======================================================================
 
 % here, we will get the sensors and the tasks in the right order
 temp = {files(:).name};
@@ -113,8 +113,6 @@ for i = 1:numtasks %iterate thru tasks
     for j = 1:length(sensorfields) %iterate thru sensors
         gyrodata = allsensors.(sensorfields{j}).rawgyro; %this data is in rads/sec.
         gyrodata_filtered = filter(gyrodata,fs);
-        t = 0:1/fs:500;
-        t = t(1:length(gyrodata_filtered));
         
         [coeff,score,latent] = pca(gyrodata_filtered);
         firstcomponent = score(:,1);
@@ -148,11 +146,12 @@ function gyrodata_filtered = filter(gyrodata,fs)
 lopasscut = 50;
 hipasscut = .5;
 nyquist = fs/2;
-gyrodata_trim = gyrodata(:,fs:end - fs)';%trim off end of recordings (1 second on each end)
+gyrodata = gyrodata';
+
 [b,a] = butter(3,lopasscut/nyquist,'low'); %lo pass filter transfer funciton coeffs
 [d,c] = butter(3,hipasscut/nyquist,'high'); %hi pass filter transfer funciton coeffs
 
-gyrodata_filtered = filtfilt(b,a,gyrodata_trim);
+gyrodata_filtered = filtfilt(b,a,gyrodata);
 gyrodata_filtered = filtfilt(d,c,gyrodata_filtered);
 end
 
