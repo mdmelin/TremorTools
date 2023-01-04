@@ -9,11 +9,11 @@
 % properly indexed to be called by later functions.
 
 function APDM_reformat_preprocess(datadir,savedir,subject,timepoint)
-loadpath = [datadir,subject,'\',subject,'_',timepoint,'\Tremor Raw Data'];
-files = dir([loadpath,'\*.h5']);
+loadpath = [datadir, filesep, subject, filesep ,subject,'_',timepoint, filesep, 'Tremor Raw Data'];
+files = dir([loadpath, filesep, '*.h5']);
 
 filename = [subject,timepoint];
-filecheckpath = [savedir,'\',filename,'_preprocessed.mat'];
+filecheckpath = [savedir, filesep, filename, '_preprocessed.mat'];
 
 if isfile(filecheckpath)
     prompt = ['It looks like there is already a preprocessed file in your save directory.\nAre you sure you want to want to rerun for ' subject , timepoint '? (y/n)'];
@@ -136,10 +136,13 @@ end
 
 %saving
 filename = [subject,timepoint];
-save([savedir,'\',filename,'_preprocessed'], 'output');
+if ~exist(savedir, 'dir')
+       mkdir(savedir)
+end
+save([savedir, filesep, filename,'_preprocessed'], 'output');
 end
 
-%% Nested functions
+%% Functions
 
 % trim and filtering
 function gyrodata_filtered = filter(gyrodata,fs)

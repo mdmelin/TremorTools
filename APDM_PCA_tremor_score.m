@@ -2,8 +2,8 @@
 %Specify datadir, subject, and timepoint as in other functions. 'dimension'
 %tells the function which PCA dimension to grab (we are almost always using
 %the first dimension). padvec specifies how much padding should be added to
-%the beginning and end of the task, specified in seconds. If we want 1.5
-%seconds of padding at the beginning of the task and no padding at the end,
+%the beginning and end of the task, specified in seconds. If we want to chop 1.5
+%seconds at the beginning of the task and chop nothing at the end,
 %we would specify the following:
 
 % padvec = [1.5 0];

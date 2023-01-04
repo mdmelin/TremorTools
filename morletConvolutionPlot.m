@@ -13,7 +13,7 @@ range_cycles = [ 3 10 ]; % sets wavelet width range
 %clim = 15;
 signaltime = t;
 signal = input;
-%% I NEED TO MAKE SuRE I SEGMENT TIME 
+%% I NEED TO MAKE SURE I SEGMENT TIME 
 wavelettime = -waveletwidth/2/fs:1/fs:waveletwidth/2/fs; %waveletwidth is the width of the wavelet in frames
 frex = linspace(min_freq,max_freq,num_frex);
 nCycles = logspace(log10(range_cycles(1)),log10(range_cycles(end)),num_frex);
