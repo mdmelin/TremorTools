@@ -5,58 +5,41 @@ clc;clear all;close all;
 taskname = 'wingbeat';
 datadir = 'Z:\Data\FUS_Gait\APDMpreprocessed';
 
-[subjects, datapaths] = APDM_parse_subjects(datadir,taskname,'pre'); % get the list of subjects we have preop data for, and the path to their data
-lesioned_side_pre = get_lesioned_side();
-
+[pre_subjects, datapaths] = APDM_parse_subjects(datadir,taskname,'pre'); % get the list of subjects we have preop data for, and the path to their data
+[post_subjects, datapaths] = APDM_parse_subjects(datadir,taskname,'post');
+subjects = intersect(pre_subjects,post_subjects);
+%lesioned_side_pre = get_lesioned_side();
+pre_scores = [];
+post_scores = [];
 for i = 1:length(subjects)
-    score = APDM_PCA_tremor_score(datadir,subjects{i},'pre',taskname,'RightHand',1,[0 0])
+    pre_scores(i) = APDM_PCA_tremor_score(datadir,subjects{i},'pre',taskname,'RightHand',1,[0 0]);
+    post_scores(i) = APDM_PCA_tremor_score(datadir,subjects{i},'post',taskname,'RightHand',1,[0 0]);
 end
 
 
-subject_list_post = APDM_parse_subjects(datadir,taskname,'post');
-lesioned_side_post = get_lesioned_side();
-
 %% plotting
+onevec = ones(1,length(pre_scores));
+twovec = onevec + 1;
 close all;
 figure;
 labels = {'Pre-procedure','Post-procedure'};
-boxplot([pre,post],labels,'PlotStyle','traditional','OutlierSize',.0001);
+boxplot([pre_scores;post_scores]',labels,'PlotStyle','traditional','OutlierSize',.0001);
 hold on;
-scatter(onevec,pre);
-scatter(twovec,post);
-parallelcoords([pre,post]);
+scatter(onevec,pre_scores);
+scatter(twovec,post_scores);
+parallelcoords([pre_scores;post_scores]');
 title('APDM Sensors - Wing-Beating Tremor');
 ylabel('Tremor Index (AU)');
 
-
+logpre = log(pre_scores);
+logpost = log(post_scores);
 figure;
 labels = {'Pre-procedure','Post-procedure'};
-boxplot([logpre,logpost],labels,'PlotStyle','traditional','OutlierSize',.0001);
+boxplot([logpre;logpost]',labels,'PlotStyle','traditional','OutlierSize',.0001);
 hold on;
 scatter(onevec,logpre);
 scatter(twovec,logpost);
-parallelcoords([logpre,logpost]);
+parallelcoords([logpre;logpost]');
 title('APDM Sensors - Wing-Beating Tremor');
 ylabel('Log Tremor Index (AU)');
 
-
-figure;
-labels = {'Pre-procedure','Post-procedure'};
-boxplot([pre2,post2],labels,'PlotStyle','traditional','OutlierSize',.0001);
-hold on;
-scatter(onev,pre2);
-scatter(twov,post2);
-parallelcoords([pre2,post2]);
-title('Wacom Tablet - Small and Large Spirals');
-ylabel('Tremor Index (AU)');
-
-
-figure;
-labels = {'Pre-procedure','Post-procedure'};
-boxplot([logpre2,logpost2],labels,'PlotStyle','traditional','OutlierSize',.0001);
-hold on;
-scatter(onev,logpre2);
-scatter(twov,logpost2);
-parallelcoords([logpre2,logpost2]);
-title('Wacom Tablet - Small and Large Spirals');
-ylabel('Log Tremor Index (AU)');
