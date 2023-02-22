@@ -14,8 +14,5 @@ for i=1:length(subject_list_pre)
 end
 
 
-
-
-
 subject_list_post = WACOM_parse_subjects(datadir,taskname,'post');
 lesioned_side_post = get_lesioned_side();
