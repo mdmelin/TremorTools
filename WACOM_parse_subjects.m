@@ -1,4 +1,4 @@
-function [subject_list, data_paths] = WACOM_parse_subjects(datadir,taskname,timepoint)
+function [subject_list, data_paths] = WACOM_parse_subjects(datadir,timepoint)
 
 paths = dir([datadir filesep '*' timepoint '.mat']);
 paths = paths(~[paths.isdir]); %remove extraneous files

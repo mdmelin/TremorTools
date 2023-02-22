@@ -15,7 +15,7 @@ assert(length(lesioned_sides) == length(subjects), 'Some subjects missing lesion
 sensors = {};
 for i = 1:length(lesioned_sides)
     if lesioned_sides{i} == 'R'
-        sensors{i} = 'LeftHand'; %opposite side of lesion
+        sensors{i} = 'LeftHand'; %pick hand sensor on opposite side of lesion
     else
         sensors{i} = 'RightHand';
     end

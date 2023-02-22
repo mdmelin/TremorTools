@@ -1,10 +1,10 @@
-function [scores, concatenated_datas] = WACOM_euclid_norm_tremor_score(datafile, taskname)
+function [scores, concatenated_datas] = WACOM_euclid_norm_tremor_score(datapath, subject, timepoint, taskname)
 
 PADLENGTH = 50; %NEED to pad before resampling signal
 fs_resample = 185;
 fnyquist = fs_resample/2;
 timevec = linspace(0,PADLENGTH/fs_resample,PADLENGTH);
-data = load(datafile);
+data = load([datapath filesep subject timepoint '.mat']);
 task_index = find(strcmp(data.cond,taskname));
 
 %%
