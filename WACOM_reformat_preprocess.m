@@ -1,9 +1,9 @@
 function WACOM_reformat_preprocess(datadir,savedir,subject,timepoint)
-TASKS = {'handwriting','large spiral R1','large spiral R2','large spiral L1'...
-    'large spiral L2','small spiral R1','small spiral R2','small spiral L1'...
-    'small spiral L2','large line R1','large line R2','large line L1'...
-    'large line L2','small line R1','small line R2','small line L1','small line L2'...
-    'hold R1','hold R2','hold L1','hold L2'};
+TASKS = {'handwriting','spiralBig_R1','spiralSmall_R1','lineBig_R1','lineSmall_R1'...
+    'spiralBig_R2','spiralSmall_R2','lineBig_R2','lineSmall_R2'...
+    'spiralBig_L1','spiralSmall_L1','lineBig_L1','lineSmall_L1'...
+    'spiralBig_L2','spiralSmall_L2','lineBig_L2','lineSmall_L2'...
+    'reach_R1','reach_R2','reach_L1','Reach_L2'};
 
 files = dir([datadir filesep subject filesep subject '_' timepoint filesep 'Wacom Data']);
 files = files(~[files.isdir]);
@@ -16,9 +16,14 @@ if length(coordfiles) == 1
     save([savedir filesep subject timepoint '.mat'],'cond','penvalinfo','penvals','response','stimulus','t');
     return
 end
-
+close all;
 for i = 1:length(figfiles)
     openfig([figfiles(i).folder filesep figfiles(i).name]);
+end
+
+for i = 1:length(coordfiles)
+    filedata(i) = load([coordfiles(i).folder filesep coordfiles(i).name]);
+    filedata(i).penvalinfo
 end
 
 for i = 1:length(TASKS)
@@ -26,9 +31,7 @@ for i = 1:length(TASKS)
     fignum(i) = input(prompt);
 end
 
-for i = 1:length(coordfiles)
-    filedata(i) = load([coordfiles(i).folder filesep coordfiles(i).name]);
-end
+
 
 fields = fieldnames(filedata);
 
@@ -38,5 +41,7 @@ for i = 1:length(fields)
         dataout.(fields{i}) = data;
     end
 end
+assert(sum(cellfun(@isempty,dataout.t)) == 0, 'There is empty data, double check you have chosen the proper files.')
+
 save([savedir filesep subject timepoint '.mat'],'-struct','dataout')
 end
