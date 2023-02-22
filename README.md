@@ -37,9 +37,11 @@ timepoint = 'pre'; %pre or post depending on visit
 APDM_reformat_preprocess(datadir,savedir,subject,timepoint)
 ```
 This script should only be run one time for each subject visit. The results are saved as .mat files and can be used by all subsequent analysis code. Though some preprocessed results are outputted by the above function, all raw APDM data is also saved to the .mat files.  
+There is also an example script for APDM preprocessing in the ```examples``` folder.
 #### Wacom tablet data
-Coming soon.
+Occasionally, the wacom collection program was run twice, if any data was accidentally not collected on the first go. The preprocessing script for Wacom data asks the user to merge thes files (if more than one exist) into a combined output. There is an example of Wacom preprocessing found in the ```examples``` folder.
 ### Computing tremor scores
+This step can only be done after the initial preprocessing (described above).
 #### APDM data
 APDM tremor scores can be computed a variety of ways for each task. Call
 ```
@@ -84,24 +86,28 @@ Importantly, not all sensors are present for all tasks. We only have six sensors
 
 The .mat files for each visit contain a MATLAB struct of the form output.[task].[sensor]. So data from the RightHand sensor for the wingbeat task will be found under output.wingbeat.RightHand. 
 
-Once you know which subjects have data, we can compute tremor in a variety of ways. For now, we are using a combination of PCA and the Hilbert transform to extract tremor relevant movement. In brief, x/y/z gyroscope data is integrated to convert rads/s to rads for each dimension. We then run PCA on these three dimensions and use the first component as our movement signal for analysis. This signal is bandpassed from 4-11Hz and then the Hilbert transform is used to compute the envelope of this signal. The average value of the envelope is the tremor index (TI). Here is an example of how one would compute the right hand sensor tremor scores for several subjects during the wingbeat task. **Pay close attention to handedness when calling this function (in reality, we would not want to just grab the RightHand sensor from every single subject, since we expect to see improvements primarily contralateral to the FUS ablation).** In the future, I will include a function to automatically get the subject handedness and procedure side, but for now it needs to be found on the excel sheet and passed as an input. 
-```
-datadir = 'Z:\Data\FUS_Gait\APDMpreprocessed';
-taskname = 'wingbeat';
+Once you know which subjects have data, we can compute tremor in a variety of ways. For now, we are using a combination of PCA and the Hilbert transform to extract tremor relevant movement. In brief, x/y/z gyroscope data is integrated to convert rads/s to rads for each dimension. We then run PCA on these three dimensions and use the first component as our movement signal for analysis. This signal is bandpassed from 4-11Hz and then the Hilbert transform is used to compute the envelope of this signal. The average value of the envelope is the tremor index (TI).
 
-subjectspre = APDM_parse_subjects(datadir,taskname,'pre'); %get subjects with preop data for the desired task
-subjectspost = APDM_parse_subjects(datadir,taskname,'post'); %get subjects with postop data for the desired task
-
-subjects = intersect(subjectspre,subjectspost); %only get subjects that have pre and post data for the desired task
-
-for i = 1:length(subjects)
-    [tremor_index_pre(i),~] = APDM_PCA_tremor_score(datadir,subjects{i},'pre',taskname,'RightHand',1,[0 0]);
-    [tremor_index_post(i),~] = APDM_PCA_tremor_score(datadir,subjects{i},'post',taskname,'RightHand',1,[0 0]);
-end
-```
-This script above is also saved as APDM_tutorial.m if you would just like to run that. 
+Look in the ```examples``` folder for an example of how to compute tremor scores and plot them from the APDM data.
 #### Wacom tablet data
-Coming soon.
+We are computing the tremor scores for wacom data in a manner somewhat similar to the APDM data. Currently, this is being handled by ```WACOM_euclid_norm_tremor_score.m```. This script requires a subject ID, timepoint, and task. Subject ID and timepoint are as described above.
+
+For Wacom data, the possible tasknames are:
+```
+'write' - handwriting, always with dominant hand
+'spiralBig_R' -  large spirals, right hand
+'spiralSmall_R' - small spirals, right hand
+'lineBig_R' - stay between large lines, right hand
+'lineSmall_R' - stay between small lines, right hand 
+'spiralBig_L' - large spirals, left hand
+'spiralSmall_L' - small spirals, left hand
+'lineBig_L' - stay between large lines, left hand
+'lineSmall_L' - stay between small lines, left hand
+'reach_R' - hold pen floating above target, right hand
+'reach_L' - hold pen floating above target, left hand
+```
+Importantly, most tasks are run more than once. ```WACOM_euclid_norm_tremor_score.m``` will return the tremor score for every time the task was run (ie. 3 values if a particular task was run 3 times).
+Look in the ```examples``` folder for an example of how to compute tremor scores and plot them from the WACOM data.
 
 ## License
 
