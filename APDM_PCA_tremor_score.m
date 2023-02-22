@@ -1,3 +1,4 @@
+function [tremor_index,hilbert_envelope] = APDM_PCA_tremor_score(datadir,subject,timepoint,taskname,sensor,dimension,padvec)
 %This function takes a subject and will output a single value tremor score.
 %Specify datadir, subject, and timepoint as in other functions. 'dimension'
 %tells the function which PCA dimension to grab (we are almost always using
@@ -30,7 +31,19 @@
 %'pre'
 %'post'
 
-function [tremor_index,hilbert_envelope] = APDM_PCA_tremor_score(datadir,subject,timepoint,taskname,sensor,dimension,padvec)
+%Possible sensor names are
+
+% 'RightWrist'
+% 'LeftWrist'
+% 'RightHand'
+% 'LeftHand'
+% 'RightUpperArm'
+% 'LeftUpperArm'
+% 'RightFood'
+% 'LeftFoot'
+% 'Lumbar'
+% 'Sternum'
+
 
 fs = 128; %constant
 nyquist = fs/2;

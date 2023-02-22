@@ -1,3 +1,4 @@
+function [subject_list, data_paths] = APDM_parse_subjects(datadir,taskname,timepoint)
 %this function takes a taskname and timepoint and returns a list of the subjects
 %that have the desired task for that day. If a subject has not been
 %preprocessed by APDM_reformat_preprocess, it will not be found by this
@@ -26,8 +27,6 @@
 %'post'
 
 %Datadir should point to the directory of preprocessed files
-
-function subject_list = APDM_parse_subjects(datadir,taskname,timepoint)
     files = dir(datadir);
     files = files(~[files.isdir]); %remove extraneous folders
     timepointlabels = contains({files.name},[timepoint '_']);
@@ -44,5 +43,12 @@ function subject_list = APDM_parse_subjects(datadir,taskname,timepoint)
     end
     files = files(hastask);
     names = {files.name};
+    paths = {files.folder}';
+    data_paths = {};
+    for i = 1:length(paths)
+        temp = paths{i};
+        temp = [temp filesep names{i}];
+        data_paths{i} = temp;
+    end
     subject_list = erase(names,{'pre_preprocessed.mat','post_preprocessed.mat'});
 end
