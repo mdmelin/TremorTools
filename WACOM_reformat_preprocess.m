@@ -5,6 +5,20 @@ TASKS = {'handwriting','spiralBig_R1','spiralSmall_R1','lineBig_R1','lineSmall_R
     'spiralBig_L2','spiralSmall_L2','lineBig_L2','lineSmall_L2'...
     'reach_R1','reach_R2','reach_L1','Reach_L2'};
 
+
+
+filecheckpath = [savedir, subject, timepoint, '.mat'];
+
+if isfile(filecheckpath)
+    prompt = ['It looks like there is already a preprocessed file in your save directory.\nAre you sure you want to want to rerun for ' subject , timepoint '? (y/n)'];
+    userin = input(prompt,"s");
+    if userin == 'n' || userin == 'N'
+        fprintf(2, '\nSkipping this subject\n');
+        return
+    end
+end
+
+
 files = dir([datadir filesep subject filesep subject '_' timepoint filesep 'Wacom Data']);
 files = files(~[files.isdir]);
 figfiles = files(contains({files.name},'.fig'));
