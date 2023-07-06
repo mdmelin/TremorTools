@@ -45,10 +45,10 @@ function [tremor_index,hilbert_envelope] = APDM_PCA_tremor_score(datadir,subject
 % 'Sternum'
 
 
-fs = 128; %constant
-nyquist = fs/2;
-
 sensordata = getSensorData(datadir,subject,timepoint,taskname,sensor);
+
+fs = 1 / mean(diff(sensordata.time)); %constant, should be 128
+nyquist = fs/2;
 
 if isempty(sensordata) %handle case of sensors not having data
     tremor_index = NaN; hilbert_envelope = NaN;

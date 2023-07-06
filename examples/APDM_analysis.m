@@ -20,18 +20,20 @@ for i = 1:length(lesioned_sides)
         sensors{i} = 'RightHand';
     end
 end
-
+%%
 pre_scores = [];
 post_scores = [];
 for i = 1:length(subjects)
-    pre_scores(i) = APDM_PCA_tremor_score(datadir,subjects{i},'pre',taskname,sensors{i},1,[0 0]);
-    post_scores(i) = APDM_PCA_tremor_score(datadir,subjects{i},'post',taskname,sensors{i},1,[0 0]);
+    %pre_scores(i) = APDM_PCA_tremor_score(datadir,subjects{i},'pre',taskname,sensors{i},1,[0 0]);
+    %post_scores(i) = APDM_PCA_tremor_score(datadir,subjects{i},'post',taskname,sensors{i},1,[0 0]);
+    i
+    [pre_scores(i),~,~] = APDM_Welch_score(datadir,subjects{i},'pre',taskname,sensors{i},[0 0],2);
+    [post_scores(i),~,~] = APDM_Welch_score(datadir,subjects{i},'post',taskname,sensors{i},[0 0],2);
 end
 
 %% plotting
 onevec = ones(1,length(pre_scores));
 twovec = onevec + 1;
-close all;
 figure;
 labels = {'Pre-procedure','Post-procedure'};
 boxplot([pre_scores;post_scores]',labels,'PlotStyle','traditional','OutlierSize',.0001);
