@@ -39,7 +39,7 @@ function [tremor_index,hilbert_envelope] = APDM_PCA_tremor_score(datadir,subject
 % 'LeftHand'
 % 'RightUpperArm'
 % 'LeftUpperArm'
-% 'RightFood'
+% 'RightFoot'
 % 'LeftFoot'
 % 'Lumbar'
 % 'Sternum'
@@ -49,6 +49,12 @@ fs = 128; %constant
 nyquist = fs/2;
 
 sensordata = getSensorData(datadir,subject,timepoint,taskname,sensor);
+
+if isempty(sensordata) %handle case of sensors not having data
+    tremor_index = NaN; hilbert_envelope = NaN;
+    return
+end
+
 fieldname = ['pca' num2str(dimension) '_angle'];
 signal = sensordata.(fieldname);
 t = sensordata.time;
