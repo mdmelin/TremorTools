@@ -1,6 +1,6 @@
 function [scores, concatenated_datas] = WACOM_euclid_norm_tremor_score(datapath, subject, timepoint, taskname)
 
-PADLENGTH = 50; %NEED to pad before resampling signal
+PADLENGTH = 200; %NEED to pad before resampling signal
 fs_resample = 185;
 fnyquist = fs_resample/2;
 timevec = linspace(0,PADLENGTH/fs_resample,PADLENGTH);

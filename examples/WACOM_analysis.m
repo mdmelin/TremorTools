@@ -1,9 +1,9 @@
 addpath(fileparts(cd));
-clc;clear all;close all;
+clc;clear all;%close all;
 
 %% an example getting data for the spirals tasks, pre and post op
 
-datadir = 'C:\Users\mmelin\Desktop\tremor\WACOMpreprocessed';
+datadir = 'X:\Wacompreprocessed';
 metadata_filepath = 'C:\Users\mmelin\Desktop\tremor\data\FUS Participants_backup_Updated.xlsx'; %contains info on lesion side
 
 [pre_subjects, data_paths_pre] = WACOM_parse_subjects(datadir,'pre'); % get the list of subjects we have preop data for, and the path to their data
@@ -16,10 +16,10 @@ tasks = {};
 for i = 1:length(lesioned_sides)
     if lesioned_sides{i} == 'R'
         tasks{i}{1} = 'spiralBig_L'; %pick hand sensor on opposite side of lesion
-        tasks{i}{2} = 'spiralSmall_L';
+        %tasks{i}{2} = 'spiralSmall_L';
     else
         tasks{i}{1} = 'spiralBig_R';
-        tasks{i}{2} = 'spiralSmall_R';
+        %tasks{i}{2} = 'spiralSmall_R';
     end
 end
 %% retrieve tremor scores for all spiral tasks (2 large and 2 small)
@@ -30,10 +30,14 @@ for i=1:length(subjects)
     pre = [];
     post = [];
     for j = 1:length(tasks{i}) %average scores over tasks
-        [temp, ~] = WACOM_euclid_norm_tremor_score(datadir, subjects{i},'pre', tasks{i}{j});
-        [temp2, ~] = WACOM_euclid_norm_tremor_score(datadir, subjects{i},'post', tasks{i}{j});
-        pre = [pre temp];
-        post = [post temp2];
+        %[temp, ~] = WACOM_euclid_norm_tremor_score(datadir, subjects{i},'pre', tasks{i}{j});
+        %[temp2, ~] = WACOM_euclid_norm_tremor_score(datadir, subjects{i},'post', tasks{i}{j});
+
+        [pre_scores,~,~] = WACOM_Welch_score(datadir, subjects{i},'pre', tasks{i}{j}, 2);
+        [post_scores,~,~] = WACOM_Welch_score(datadir, subjects{i},'post', tasks{i}{j}, 2);
+
+        pre = [pre pre_scores];
+        post = [post post_scores];
     end
     mean_pre_scores = [mean_pre_scores mean(pre)];
     mean_post_scores = [mean_post_scores mean(post)];

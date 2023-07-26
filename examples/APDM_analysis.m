@@ -3,7 +3,7 @@ clc;clear all;close all;
 
 %% an example getting data for the wingbeat task, pre and post op
 taskname = 'wingbeat';
-datadir = 'Y:\APDMpreprocessed';
+datadir = 'X:\APDMpreprocessed';
 metadata_filepath = 'C:\Users\mmelin\Desktop\tremor\data\FUS Participants_backup_Updated.xlsx'; %contains info on lesion side
 
 [pre_subjects, datapaths] = APDM_parse_subjects(datadir,taskname,'pre'); % get the list of subjects we have preop data for, and the path to their data
