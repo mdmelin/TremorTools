@@ -1,4 +1,4 @@
-function [subject_list, lesioned_sides, data_paths] = APDM_parse_subjects(metadata_filepath,datadir,taskname,timepoint)
+function [subject_list, lesioned_sides] = APDM_parse_subjects(metadata_filepath,datadir,taskname,timepoint)
 %this function takes a taskname and timepoint and returns a list of the subjects
 %that have the desired task for that day. If a subject has not been
 %preprocessed by APDM_reformat_preprocess, it will not be found by this

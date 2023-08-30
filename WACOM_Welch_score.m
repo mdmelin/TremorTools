@@ -2,9 +2,9 @@ function [peak_amps,peak_freqs,half_bandwidths] = WACOM_Welch_score(datapath, su
 %Implementation of TabletSpectrum.m (Elble et al 2016)
 
 frequencySearch   = [2.5 11];                            % Frequency range to search for peak
-datapath
-subject
-timepoint
+%datapath
+%subject
+%timepoint
 
 % fetch the data
 task_data = load([datapath filesep subject timepoint '.mat']);
