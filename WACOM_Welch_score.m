@@ -23,7 +23,7 @@ for i = 1:length(task_index) %there are multiple trials for one type of task
     time = cat(2,times{:});
 
     if size(signals,1)<10
-        fprintf('Not enough data in file for analysis\n');
+        fprintf('Not enough samples in this task for analysis\n');
         continue;
     end
 
