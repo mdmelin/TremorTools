@@ -84,13 +84,13 @@ for i = 1:length(task_index) %there are multiple trials for one type of task
 
     halfBandwidth = f(lo_ind) - f(hi_ind);
 
-%     figure;
-%     plot(f,p); hold on;
-%     xlim([0,20]);
-%     xline(f(lo_ind));xline(f(hi_ind));
-%     xlabel('Frequency (Hz)')
-%     ylabel('Amplitude Spectrum')
-%     set(gca,'Visible','On');
+    figure;
+    plot(f,p); hold on;
+    xlim([0,20]);
+    xline(f(lo_ind));xline(f(hi_ind));
+    xlabel('Frequency (Hz)')
+    ylabel('Amplitude Spectrum')
+    set(gca,'Visible','On');
 
     peak_amps = [peak_amps PeakAmp]; 
     peak_freqs = [peak_freqs PeakFreq]; 

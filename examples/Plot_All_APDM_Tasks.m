@@ -15,10 +15,10 @@ tasks = {'resting','headtrunk','ipsilegpost','contralegpost',...
 %lesioned_sides = lesioned_sides(1);
 %% Iterate over all sensors and tasks
 
-parfor k=1:length(tasks)
+for k=1:length(tasks)
 
-    [pre_subjects, lesioned_sides1, ~] = APDM_parse_subjects(metadata_filepath, datadir,tasks{k},'pre'); % get the list of subjects we have preop data for, and the path to their data
-    [post_subjects, lesioned_sides2, ~] = APDM_parse_subjects(metadata_filepath, datadir,tasks{k},'post');
+    [pre_subjects, lesioned_sides1] = APDM_parse_subjects(metadata_filepath, datadir,tasks{k},'pre'); % get the list of subjects we have preop data for, and the path to their data
+    [post_subjects, lesioned_sides2] = APDM_parse_subjects(metadata_filepath, datadir,tasks{k},'post');
     [subjects,ia,ib] = intersect(pre_subjects,post_subjects);
     lesioned_sides = lesioned_sides1(ia);
 
@@ -98,9 +98,9 @@ parfor k=1:length(tasks)
         ylim([-500,500]);
 
 
-        savepath = ['X:\APDMpreprocessed\figs\linear_scale\' tasks{k} '_' sensors{l} '.png'];
-        savepath2 = ['X:\APDMpreprocessed\figs\log_scale\' tasks{k} '_' sensors{l} '.png'];
-        savepath3 = ['X:\APDMpreprocessed\figs\percent_change\' tasks{k} '_' sensors{l} '.png'];
+        savepath = ['X:\tremor_figs\apdm\linear_scale\' tasks{k} '_' sensors{l} '.png'];
+        savepath2 = ['X:\tremor_figs\apdm\log_scale\' tasks{k} '_' sensors{l} '.png'];
+        savepath3 = ['X:\tremor_figs\apdm\percent_change\' tasks{k} '_' sensors{l} '.png'];
         saveas(fig, savepath);
         saveas(fig2, savepath2);
         saveas(fig3, savepath3);

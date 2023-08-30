@@ -15,7 +15,7 @@ tasks = {'spiralBig_contra','spiralSmall_contra','lineBig_contra','lineSmall_con
 %lesioned_sides = lesioned_sides(1);
 %% Iterate over all sensors and tasks
 
-parfor k=1:length(tasks)
+for k=1:length(tasks)
 
     [pre_subjects, lesioned_sides1] = WACOM_parse_subjects(metadata_filepath, datadir,tasks{k},'pre'); % get the list of subjects we have preop data for, and the path to their data
     [post_subjects, lesioned_sides2] = WACOM_parse_subjects(metadata_filepath, datadir,tasks{k},'post');
@@ -86,9 +86,9 @@ parfor k=1:length(tasks)
     ylim([-500,500]);
 
 
-    savepath = ['X:\WACOMpreprocessed\figs\linear_scale\' tasks{k} '.png'];
-    savepath2 = ['X:\WACOMpreprocessed\figs\log_scale\' tasks{k} '.png'];
-    savepath3 = ['X:\WACOMpreprocessed\figs\percent_change\' tasks{k} '.png'];
+    savepath = ['X:\tremor_figs\wacom\linear_scale\' tasks{k} '.png'];
+    savepath2 = ['X:\tremor_figs\wacom\log_scale\' tasks{k} '.png'];
+    savepath3 = ['X:\tremor_figs\wacom\percent_change\' tasks{k} '.png'];
     saveas(fig, savepath);
     saveas(fig2, savepath2);
     saveas(fig3, savepath3);
