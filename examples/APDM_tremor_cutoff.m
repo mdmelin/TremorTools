@@ -11,11 +11,13 @@ tasks = {'resting','headtrunk','ipsilegpost','contralegpost',...
     'ipsilegact','contralegact','ipsilegact2','contralegact2','armsextended',...
     'wingbeat','ipsiarmact','contraarmact','ipsiarmact2','contraarmact2'};
 
+tasks = {'armsextended'};
+sensors = {'ContraHand'};
 %subjects = subjects(1);
 %lesioned_sides = lesioned_sides(1);
 %% Iterate over all sensors and tasks
 
-parfor k=1:length(tasks)
+for k=1:length(tasks)
 
     [pre_subjects, lesioned_sides1] = APDM_parse_subjects(metadata_filepath, datadir,tasks{k},'pre'); % get the list of subjects we have preop data for, and the path to their data
     [post_subjects, lesioned_sides2] = APDM_parse_subjects(metadata_filepath, datadir,tasks{k},'post');
@@ -85,14 +87,14 @@ parfor k=1:length(tasks)
 
         fig3 = figure;
         hold on
-        histogram(pre_freq,20,'Binwidth',.2)
-        histogram(post_freq,20,'BinWidth',.2)
+        histogram(pre_freq,20,'Binwidth',.1)
+        histogram(post_freq,20,'BinWidth',.1)
         legend({'pre','post'})
 
 
         savepath = ['X:\tremor_figs\apdm\cluster\' tasks{k} '_' sensors{l} '.png'];
         savepath2 = ['X:\tremor_figs\apdm\log_cluster\' tasks{k} '_' sensors{l} '.png'];
-        savepath3 = ['X:\tremor_figs\apdm\freq_hist\' tasks{k} '.png'];
+        savepath3 = ['X:\tremor_figs\apdm\freq_hist\' tasks{k} '_' sensors{l} '.png'];
 
         saveas(fig, savepath);
         saveas(fig2, savepath2);
