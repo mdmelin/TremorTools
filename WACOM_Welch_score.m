@@ -1,7 +1,7 @@
 function [peak_amps,peak_freqs,half_bandwidths] = WACOM_Welch_score(datapath, subject, timepoint, taskname, windowDuration)
-%Implementation of TabletSpectrum.m (Elble et al 2016)
+%Personal implementation of TabletSpectrum.m (from Elble et al 2016)
 
-frequencySearch   = [2.5 11];                            % Frequency range to search for peak
+frequencySearch   = [3.8 10];                            % Frequency range to search for peak
 %datapath
 %subject
 %timepoint
@@ -82,7 +82,7 @@ for i = 1:length(task_index) %there are multiple trials for one type of task
     end
 
 
-    halfBandwidth = f(lo_ind) - f(hi_ind);
+    halfBandwidth = f(hi_ind) - f(lo_ind);
 
     figure;
     plot(f,p); hold on;

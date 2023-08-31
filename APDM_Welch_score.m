@@ -1,12 +1,13 @@
 function [PeakAmp,PeakFreq,halfBandwidth] = APDM_Welch_score(datadir,subject,timepoint,taskname,sensor,padvec,windowDuration)
-% Implementation of TremorSpectrum.m (Elble et al 2016)
+% Implementation of TremorSpectrum.m (from Elble et al 2016)
 
 %--------------------------------------------------------------------------
 % Constants
 nTimesSpectrogram = 500;                               % Number of points (approximately) to plot for the spectrogram
 nFFTMinimum       = 2^12;                              % Minimum number of points to calculate the FFT with zero padding
 frequencyRange    = [0 20];                            % Frequency range to display (Hz)
-frequencySearch   = [2.5 11];                            % Frequency range to search for peak
+frequencySearch   = [3.8 10];                            % Frequency range to search for peak
+
 datatype = 'rawgyro';
 %--------------------------------------------------------------------------
 
@@ -79,15 +80,15 @@ else
 end
 
 
-halfBandwidth = f(lo_ind) - f(hi_ind);
+halfBandwidth = f(hi_ind) - f(lo_ind);
 
-figure;
-plot(f,asd); hold on;
-xlim(frequencyRange);
-xline(f(lo_ind));xline(f(hi_ind));
-xlabel('Frequency (Hz)')
-ylabel('Amplitude Spectrum')
-set(gca,'Visible','On');
+% figure;
+% plot(f,asd); hold on;
+% xlim(frequencyRange);
+% xline(f(lo_ind));xline(f(hi_ind));
+% xlabel('Frequency (Hz)')
+% ylabel('Amplitude Spectrum')
+% set(gca,'Visible','On');
 
 
 end
