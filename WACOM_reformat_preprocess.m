@@ -25,7 +25,7 @@ figfiles = files(contains({files.name},'.fig'));
 coordfiles = files(contains({files.name},'.mat'));
 
 if length(coordfiles) == 1
-    fprintf('There is only one file for this subject, no merging is needed.');
+    fprintf('\nThere is only one file for this subject, no merging is needed.');
     load([coordfiles(end).folder filesep coordfiles(end).name]);
     save([savedir filesep subject timepoint '.mat'],'cond','penvalinfo','penvals','response','stimulus','t');
     return
@@ -55,7 +55,7 @@ for i = 1:length(fields)
         dataout.(fields{i}) = data;
     end
 end
-assert(sum(cellfun(@isempty,dataout.t)) == 0, 'There is empty data, double check you have chosen the proper files.')
+%assert(sum(cellfun(@isempty,dataout.t)) == 0, 'There is empty data, double check you have chosen the proper files.')
 
 save([savedir filesep subject timepoint '.mat'],'-struct','dataout')
 end

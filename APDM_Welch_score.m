@@ -81,14 +81,14 @@ end
 
 
 halfBandwidth = f(hi_ind) - f(lo_ind);
-
-figure;
-plot(f,asd); hold on;
-xlim(frequencyRange);
-xline(f(lo_ind));xline(f(hi_ind));
-xlabel('Frequency (Hz)')
-ylabel('Amplitude Spectrum')
-set(gca,'Visible','On');
+% 
+% figure;
+% plot(f,asd); hold on;
+% xlim(frequencyRange);
+% xline(f(lo_ind));xline(f(hi_ind));
+% xlabel('Frequency (Hz)')
+% ylabel('Amplitude Spectrum')
+% set(gca,'Visible','On');
 
 
 end

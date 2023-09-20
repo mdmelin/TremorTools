@@ -12,5 +12,5 @@ for i=1:length(peak_freqs)
     else
         has_tremor(i) = 0;
 end
-
+has_tremor = logical(has_tremor);
 end

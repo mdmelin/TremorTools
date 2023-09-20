@@ -84,13 +84,13 @@ for i = 1:length(task_index) %there are multiple trials for one type of task
 
     halfBandwidth = f(hi_ind) - f(lo_ind);
 
-    figure;
-    plot(f,p); hold on;
-    xlim([0,20]);
-    xline(f(lo_ind));xline(f(hi_ind));
-    xlabel('Frequency (Hz)')
-    ylabel('Amplitude Spectrum')
-    set(gca,'Visible','On');
+%     figure;
+%     plot(f,p); hold on;
+%     xlim([0,20]);
+%     xline(f(lo_ind));xline(f(hi_ind));
+%     xlabel('Frequency (Hz)')
+%     ylabel('Amplitude Spectrum')
+%     set(gca,'Visible','On');
 
     peak_amps = [peak_amps PeakAmp]; 
     peak_freqs = [peak_freqs PeakFreq]; 
@@ -106,6 +106,10 @@ function [x,time,fs_resample] = resample_and_filter(x,time)
 PADLENGTH = 200; %NEED to pad before resampling and filtering signal
 
 fs_resample = floor(1 / mean(diff(time)));
+
+if fs_resample <= 18*2 % enforce minimum fs so bandpass filter works
+    fs_resample = 18.01*2;
+end
 fnyquist = fs_resample / 2;
 
 timevec = linspace(0,PADLENGTH/fs_resample,PADLENGTH);
