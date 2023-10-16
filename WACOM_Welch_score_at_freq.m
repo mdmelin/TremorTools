@@ -1,4 +1,4 @@
-function [peak_amps,peak_freqs,half_bandwidths] = WACOM_Welch_score(datapath, subject, timepoint, taskname, windowDuration)
+function [peak_amps,peak_freqs,half_bandwidths] = WACOM_Welch_score_at_freq(datapath, subject, timepoint, taskname, windowDuration, target_freq)
 %Personal implementation of TabletSpectrum.m (from Elble et al 2016)
 
 frequencySearch   = [3.8 10];                            % Frequency range to search for peak
@@ -65,30 +65,10 @@ for i = 1:length(task_index) %there are multiple trials for one type of task
 
     %% find peaks
     [amps,locs,w,p] = findpeaks(asd_small);
+    [~, closest_peak_ind] = min(abs(f_small(locs) - target_freq));
 
-    halfBandwidth = [];
-    for j=1:length(locs)
-        isHalfMax = ~(asd_small < .707*amps(j));
-        %figure;hold on;plot(asd_small);plot(isHalfMax);
-        halfmax_f = f_small(isHalfMax);
-        halfBandwidth = [halfBandwidth, halfmax_f(end) - halfmax_f(1)];
-    end
-    valid_tremor_peaks = f_small(locs) > 3.7 & f_small(locs) < 10 & halfBandwidth' < 2;
-
-    PeakAmp = amps(valid_tremor_peaks);
-    PeakFreq = f_small(locs(valid_tremor_peaks));
-    halfBandwidth = halfBandwidth(valid_tremor_peaks);
-
-    if sum(valid_tremor_peaks) == 0
-        PeakAmp = NaN;
-        PeakFreq = NaN;
-        halfBandwidth = NaN;
-    else
-        [~,biggest_peak] = max(PeakAmp);
-        PeakAmp = PeakAmp(biggest_peak);
-        PeakFreq = PeakFreq(biggest_peak);
-        halfBandwidth = halfBandwidth(biggest_peak);
-    end
+    PeakAmp = amps(closest_peak_ind);
+    PeakFreq = f_small(locs(closest_peak_ind));
 
     %     figure;
     %     plot(f,p); hold on;
@@ -100,7 +80,7 @@ for i = 1:length(task_index) %there are multiple trials for one type of task
 
     peak_amps = [peak_amps PeakAmp];
     peak_freqs = [peak_freqs PeakFreq];
-    half_bandwidths = [half_bandwidths halfBandwidth];
+    %half_bandwidths = [half_bandwidths halfBandwidth];
 
 end
 end

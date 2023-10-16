@@ -1,4 +1,4 @@
-function [pre_amp, post_amp, subjects, has_tremor_pre] = allAPDMScores(task, sensor)
+function [pre_amp, post_amp, subjects] = allAPDMScores(task, sensor)
 %% get availible subjects with pre and post data
 % Subjects missing either preop or postop visit will not be exported
 
@@ -46,13 +46,17 @@ for i=1:length(subjects)
     end
 
     [pre_amp(i),pre_freq(i),pre_half(i)] = APDM_Welch_score(datadir,subjects{i},'pre',taskname,task_sensor,[0 0],2);
-    [post_amp(i),post_freq(i),post_half(i)] = APDM_Welch_score(datadir,subjects{i},'post',taskname,task_sensor,[0 0],2);
+    if isnan(pre_amp(i))
+        post_amp(i) = NaN; post_freq(i) = NaN; post_half(i) = NaN;
+    else
+        [post_amp(i)] = APDM_Welch_score_at_freq(datadir,subjects{i},'post',taskname,task_sensor,[0 0],2,pre_freq(i));
+    end
 end
 
-has_tremor_pre = apply_tremor_metrics(pre_freq,pre_half);
-has_tremor_post = apply_tremor_metrics(post_freq,post_half);
-fprintf('\nFor %s task and sensor %s:\n',task,sensor)
-fprintf('%i of %i subjects had a detectable preop tremor peak\n',sum(has_tremor_pre),length(has_tremor_pre))
-fprintf('%i of %i subjects had a detectable postop tremor peak\n',sum(has_tremor_post),length(has_tremor_post))
+% has_tremor_pre = apply_tremor_metrics(pre_freq,pre_half);
+% has_tremor_post = apply_tremor_metrics(post_freq,post_half);
+% fprintf('\nFor %s task and sensor %s:\n',task,sensor)
+% fprintf('%i of %i subjects had a detectable preop tremor peak\n',sum(has_tremor_pre),length(has_tremor_pre))
+% fprintf('%i of %i subjects had a detectable postop tremor peak\n',sum(has_tremor_post),length(has_tremor_post))
 
 end

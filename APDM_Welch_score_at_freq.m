@@ -1,4 +1,4 @@
-function [PeakAmp,PeakFreq,halfBandwidth] = APDM_Welch_score(datadir,subject,timepoint,taskname,sensor,padvec,windowDuration)
+function [PeakAmp] = APDM_Welch_score_at_freq(datadir,subject,timepoint,taskname,sensor,padvec,windowDuration, target_freq)
 % Implementation of TremorSpectrum.m (from Elble et al 2016)
 
 %--------------------------------------------------------------------------
@@ -64,36 +64,21 @@ f_small = f(f>frequencySearch(1) & f<frequencySearch(2));
 
 [amps,locs,w,p] = findpeaks(asd_small);
 
-halfBandwidth = [];
-for i=1:length(locs)
-    isHalfMax = ~(asd_small < .707*amps(i));
-    %figure;hold on;plot(asd_small);plot(isHalfMax);
-    halfmax_f = f_small(isHalfMax);
-    halfBandwidth = [halfBandwidth, halfmax_f(end) - halfmax_f(1)];
+[~, closest_peak_ind] = min(abs(f_small(locs) - target_freq));
+
+PeakAmp = amps(closest_peak_ind);
+PeakFreq = f_small(locs(closest_peak_ind));
+
+%handle case with no peaks detected
+if isempty(PeakAmp)
+    [PeakFreq, closest_peak_ind] = min(abs(f_small- target_freq));
+    PeakAmp = asd_small(closest_peak_ind);
 end
-valid_tremor_peaks = f_small(locs) > 3.7 & f_small(locs) < 10 & halfBandwidth' < 2;
-
-PeakAmp = amps(valid_tremor_peaks);
-PeakFreq = f_small(locs(valid_tremor_peaks));
-halfBandwidth = halfBandwidth(valid_tremor_peaks);
-
-if sum(valid_tremor_peaks) == 0
-    PeakAmp = NaN;
-    PeakFreq = NaN;
-    halfBandwidth = NaN;
-else
-    [~,biggest_peak] = max(PeakAmp);
-    PeakAmp = PeakAmp(biggest_peak);
-    PeakFreq = PeakFreq(biggest_peak);
-    halfBandwidth = halfBandwidth(biggest_peak);
-end
-
 
 
 % figure;
 % plot(f,asd); hold on;
 % xlim(frequencyRange);
-% xline(f(lo_ind));xline(f(hi_ind));
 % xlabel('Frequency (Hz)')
 % ylabel('Amplitude Spectrum')
 % set(gca,'Visible','On');
