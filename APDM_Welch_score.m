@@ -13,6 +13,10 @@ datatype = 'rawgyro';
 
 
 sensordata = getSensorData(datadir,subject,timepoint,taskname,sensor);
+if isempty(sensordata)
+    PeakAmp = NaN; PeakFreq = NaN; halfBandwidth = NaN;
+    return
+end
 X = sensordata.(datatype);
 t = sensordata.time;
 
